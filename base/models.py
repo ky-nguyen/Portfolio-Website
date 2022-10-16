@@ -47,3 +47,13 @@ class Message(models.Model):
     def __str__(self):
         return self.name
 
+
+class Endorsement(models.Model):
+    name = models.CharField(max_length=255, null=True)
+    body = models.TextField()
+    featured = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.body[0:50]
+
+
