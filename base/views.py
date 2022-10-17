@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from base.models import Project, Skill, Message, Endorsement
-from . forms import ProjectForm, MessageForm, SkillForm, EndorsementForm
+from . forms import ProjectForm, MessageForm, SkillForm, EndorsementForm, CommentForm
 from django.contrib import messages
     
 # Create your views here.
@@ -9,9 +9,10 @@ from django.contrib import messages
 def homePage(request):
     projects = Project.objects.all()
     detailedSkills = Skill.objects.exclude(body='')
+
     skills = Skill.objects.filter(body='')
 
-    endorsement = Endorsement.objects.all()
+    endorsement = Endorsement.objects.filter(approved=True)
 
     form = MessageForm()
 
@@ -33,8 +34,25 @@ def homePage(request):
 
 def projectPage(request, pk):
     project = Project.objects.get(id=pk)
+    count = project.comment_set.count()
+
+    comments = project.comment_set.all().order_by('-created')
+
+    form = CommentForm()
+
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.project = project
+            form.save()
+            messages.success(request, 'You comment was successfully sent!.')
+
     context = {
-        'project': project
+        'project': project,
+        'count': count,
+        'comments': comments,
+        'form': form,
     }
     return render(request, 'base/project.html', context)
 
@@ -117,3 +135,7 @@ def addEndorsement(request):
         'form': form,
     }
     return render(request, 'base/endorsement_form.html', context)
+
+
+def donationPage(request):
+    return render(request, 'base/donation.html')

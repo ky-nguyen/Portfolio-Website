@@ -19,6 +19,7 @@ body{
     height: 50px;
     display: flex;
     justify-content: center;
+    align-items: center;
 }
 
 .nav-link{
@@ -123,6 +124,9 @@ body{
 .skill--wrapper{
     margin-top: 2em;
     margin-bottom: 2em;
+    display: flex;
+    gap: 2em;
+    align-items: center;
 }
 
 .other--skills-wrapper{
@@ -142,6 +146,11 @@ body{
     display: block;
     max-width: 600px;
     margin: 0 auto;
+}
+
+.skill--logo{
+    height: 60px;
+    object-fit: contain;
 }
 
 @media (max-width:900px){
@@ -164,6 +173,14 @@ body{
 @media (max-width:900px){
     .skills--container{
         width: 100%;
+    }
+
+}
+
+@media (max-width:400px){
+
+    .skill--wrapper{
+        flex-flow: column;
     }
 }
 
